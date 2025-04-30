@@ -38,6 +38,8 @@ const TimetableDisplay = () => {
 
     try {
       const data = await getTimetable(classId, date);
+      console.log('classId from frontend:', classId);
+
       setTimetable(data);
     } catch (error) {
       console.error('Failed to fetch timetable:', error);

@@ -1,10 +1,14 @@
 import Event from "../Teachers/Eventlist";
 import Exams from "../Teachers/ExamList";
 
-import StudentsList from "../Teachers/StudentList";
+// import StudentsList from "../Teachers/StudentList";
+import AddStudent from "../AddStudents";
+
 import Parents from "../Teachers/ParentList";
 // import TimetableDisplay from '../../pages/Teachers/TimetableDisplay';
 import TimetableDisplay from '../../pages/components/GetTimetable';
+import Attendence from '../../pages/Teachers/TimetableDisplay';
+
 
 import TeacherProfile  from '../../pages/Teachers/TeacherProfile'
 
@@ -23,7 +27,7 @@ const DashboardContent = ({ selectedMenu }) => {
 
 {selectedMenu === "students" && (
         <div>
-          <StudentsList />
+          <AddStudent />
         </div>
       )}
 
@@ -34,7 +38,7 @@ const DashboardContent = ({ selectedMenu }) => {
       )}
       {selectedMenu === "Attendance" && (
         <div>
-          <TimetableDisplay />
+          <Attendence />
         </div>
       )}
 

@@ -46,10 +46,10 @@ const SubjectList = () => {
                   {subject.name}
                 </td>
                 <td className="py-4 px-6 border-b text-gray-700">
-                  {subject.teacher ? subject.teacher.name : 'N/A'}
+                  {subject.teacher?.name || 'N/A'}
                 </td>
                 <td className="py-4 px-6 border-b text-gray-700">
-                  {subject.teacher ? subject.teacher.email : 'N/A'}
+                  {subject.teacher?.email || 'N/A'}
                 </td>
               </tr>
             ))}

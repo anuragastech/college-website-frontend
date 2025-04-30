@@ -1,58 +1,151 @@
 import { Route, Routes } from 'react-router-dom';
+
 import Login from './pages/Login';
-import AdminDashboard from './pages/AdminDashboard';
 import Register from './pages/Register';
+import StudentRegister from './pages/students/signup';
+
+import AdminDashboard from './pages/AdminDashboard';
 import AddTeacher from './pages/AddTeacher';
 import AddStudent from './pages/AddStudents';
 import AddSubject from './pages/AddSubject';
 import SetTimetable from './pages/TimeTable';
-import ExamList from './pages/ExamList'
+import ExamList from './pages/ExamList';
 import AddClass from './pages/AddClass';
-import EventList from './pages/EventList'
+import EventList from './pages/EventList';
+import ParentData from './pages/parentData';
+
 import TeacherDashboard from './pages/Teachers/TeacherDashboard';
-import TimetableDisplay from './pages/Teachers/TimetableDisplay';
-import ParentData from  './pages/parentData'
+import TimetableAttendence from './pages/Teachers/TimetableDisplay';
+import TeacherProfile from './pages/Teachers/TeacherProfile';
+import TeachersHome from './pages/Teachers/TeachersHome';
 
 import StudentDashboard from './pages/students/StudentDashboard';
 import StudentProfile from './pages/students/StudentProfilePasge';
-import TeacherProfile from './pages/Teachers/TeacherProfile';
-import AdminHome from './pages/Home';
+import GetStudentAttendence from './pages/students/StudentAttendenceDisplay';
 
-import TeachersHome from './pages/Teachers/TeachersHome';
 import TimetableView from './pages/components/TimetableView';
+import GetAttendence from './pages/components/GetAttendence';
+import CreateTImetable from './pages/CreateMonthlyTimetabble';
+import GetMonthlTImetable from './pages/components/GetMonthlTimetable';
+import ClassWiswStudennts from './pages/GetAllClasswiseStudents';
 
-
+import AdminHome from './pages/Home';
+import PrivateRoute from './pages/components/privetRoute';
+import StudentHomePage from './pages/students/StudentHomePae';
+import StudentLogin from './pages/students/stdLogin';
+import TchrLogin    from './pages/Teachers/loginTchr'
+import  TchrSignup from './pages/Teachers/signupTchr'
 function App() {
   return (
-    
     <Routes>
-      <Route path="/" element={<Login />} />
+      {/* 🌐 Public Routes */}
+      <Route path="/admin" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      <Route path="/admin/add-subject" element={<AddSubject />} />
-      <Route path="/admin/add-student" element={<AddStudent />} />
-      <Route path="/admin/add-teacher" element={<AddTeacher />} />
-      <Route path="/admin/set-timetable" element={<SetTimetable />} />
-      <Route path="/admin/add-class" element={<AddClass />} />
-      <Route path="/admin/examList" element={<ExamList />} />
-      <Route path="/admin/events" element={<EventList />} />
-      <Route path="/admin/parntData" element={<ParentData />} />
-      <Route path="/admin/home" element={<AdminHome />} />
+      <Route path="/" element={<StudentLogin />} />
+      <Route path="/studensinup" element={<StudentRegister />} />
 
+      <Route path="/registerteacher" element={<TchrSignup />} />
+      <Route path="/teacher" element={<TchrLogin />} />
 
-      <Route path="/teachers/dashboard" element={<TeacherDashboard />} />
-      <Route path="/teachers/Timetable" element={<TimetableDisplay />} />
-      <Route path="/teacher/profile" element={<TeacherProfile />} />
-      <Route path="/teacher/Home" element={<TeachersHome />} />
+      {/* 👑 Admin Routes */}
+      <Route
+        path="/admin/dashboard"
+        element={<PrivateRoute element={<AdminDashboard />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/add-subject"
+        element={<PrivateRoute element={<AddSubject />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/add-student"
+        element={<PrivateRoute element={<AddStudent />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/add-teacher"
+        element={<PrivateRoute element={<AddTeacher />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/set-timetable"
+        element={<PrivateRoute element={<SetTimetable />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/add-class"
+        element={<PrivateRoute element={<AddClass />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/examList"
+        element={<PrivateRoute element={<ExamList />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/events"
+        element={<PrivateRoute element={<EventList />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/parentData"
+        element={<PrivateRoute element={<ParentData />} allowedRoles={['admin']} />}
+      />
+      <Route
+        path="/admin/home"
+        element={<PrivateRoute element={<AdminHome />} allowedRoles={['admin']} />}
+      />
 
-     
+      {/* 👨‍🏫 Teacher Routes */}
+      <Route
+        path="/teachers/dashboard"
+        element={<PrivateRoute element={<TeacherDashboard />} allowedRoles={['teacher']} />}
+      />
+      <Route
+        path="/teachers/attendence"
+        element={<PrivateRoute element={<TimetableAttendence />} allowedRoles={['teacher']} />}
+      />
+      <Route
+        path="/teacher/profile"
+        element={<PrivateRoute element={<TeacherProfile />} allowedRoles={['teacher']} />}
+      />
+      <Route
+        path="/teacher/home"
+        element={<PrivateRoute element={<TeachersHome />} allowedRoles={['teacher']} />}
+      />
 
-      <Route path="/student/dashboard" element={<StudentDashboard />} />
-      <Route path="/student/profile" element={<StudentProfile />} />
+      {/* 🧑‍🎓 Student Routes */}
+      <Route
+        path="/student/dashboard"
+        element={<PrivateRoute element={<StudentDashboard />} allowedRoles={['student']} />}
+      />
+      <Route
+        path="/student/profile"
+        element={<PrivateRoute element={<StudentProfile />} allowedRoles={['student']} />}
+      />
+      <Route
+        path="/getattendencestudent"
+        element={<PrivateRoute element={<GetStudentAttendence />} allowedRoles={['student']} />}
+      />
+      <Route
+        path="/studenthome"
+        element={<PrivateRoute element={<StudentHomePage />} allowedRoles={['student']} />}
+      />
 
-      <Route path="/timetableview" element={<TimetableView />} />
-
-      
+      {/* 🌍 Common Routes */}
+      <Route
+        path="/timetableview"
+        element={<PrivateRoute element={<TimetableView />} allowedRoles={['admin', 'teacher', 'student']} />}
+      />
+      <Route
+        path="/getattendence"
+        element={<PrivateRoute element={<GetAttendence />} allowedRoles={['admin', 'teacher', 'student']} />}
+      />
+      <Route
+        path="/monthlytimetable"
+        element={<PrivateRoute element={<CreateTImetable />} allowedRoles={['admin', 'teacher']} />}
+      />
+      <Route
+        path="/getmonthlytimetable"
+        element={<PrivateRoute element={<GetMonthlTImetable />} allowedRoles={['admin', 'teacher', 'student']} />}
+      />
+      <Route
+        path="/classwise"
+        element={<PrivateRoute element={<ClassWiswStudennts />} allowedRoles={['admin']} />}
+      />
     </Routes>
   );
 }

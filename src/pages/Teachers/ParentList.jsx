@@ -31,7 +31,7 @@ const StudentParentList = () => {
                 <th className="px-4 py-2 border border-gray-600">Parent Phone</th>
                 <th className="px-4 py-2 border border-gray-600">Student Name</th>
                 <th className="px-4 py-2 border border-gray-600">Roll Number</th>
-                <th className="px-4 py-2 border border-gray-600">Class</th>
+                {/* <th className="px-4 py-2 border border-gray-600">Class</th> */}
                 <th className="px-4 py-2 border border-gray-600">Student Email</th>
               </tr>
             </thead>
@@ -43,7 +43,7 @@ const StudentParentList = () => {
                   <td className="px-4 py-2 border border-gray-600">{student.parentDetails?.phone || 'N/A'}</td>
                   <td className="px-4 py-2 border border-gray-600">{student.name}</td>
                   <td className="px-4 py-2 border border-gray-600">{student.rollNumber}</td>
-                  <td className="px-4 py-2 border border-gray-600">{student.classId?.name || 'N/A'}</td>
+                  {/* <td className="px-4 py-2 border border-gray-600">{student.classId?.className || 'N/A'}</td> */}
                   <td className="px-4 py-2 border border-gray-600">{student.email}</td>
                 </tr>
               ))}

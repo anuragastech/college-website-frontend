@@ -1,20 +1,19 @@
-
-
 import Event from "../Teachers/ExamList";
 import Exams from "../Teachers/ExamList";
-import Subjects from  '../students/subjectlist'
-// import TimetableDisplay from '../../pages/students/Timetable';
+import Subjects from '../students/subjectlist';
 import TimetableDisplay from '../../pages/components/GetTimetable';
+import AttendenceDisplay from '../../pages/students/StudentAttendenceDisplay';
+import StudentHome from '../students/StudentHomePae';
 
-
-const DashboardContent = ({ selectedMenu }) => {
+const DashboardContent = ({ selectedMenu, setSelectedMenu }) => {
   return (
     <div className="p-8">
       {selectedMenu === "home" && (
-        <h2 className="text-2xl font-bold">Welcome to the Dashboard!</h2>
+        <div>
+          <StudentHome setSelectedMenu={setSelectedMenu} />
+        </div>
       )}
 
-      
       {selectedMenu === "timetable" && (
         <div>
           <TimetableDisplay />
@@ -40,7 +39,9 @@ const DashboardContent = ({ selectedMenu }) => {
       )}
 
       {selectedMenu === "attendance" && (
-        <h2 className="text-2xl font-bold">Attendance Records</h2>
+        <div>
+          <AttendenceDisplay />
+        </div>
       )}
     </div>
   );

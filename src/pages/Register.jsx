@@ -7,8 +7,7 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    role: 'student',
-    parentEmail: '',
+    role: 'teacher', // Default to teacher or admin
   });
 
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ const Register = () => {
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate('/');
     } catch (error) {
-      console.error(error.response.data.message);
+      console.error(error.response?.data?.message || 'Registration failed');
     }
   };
 
@@ -85,28 +84,10 @@ const Register = () => {
               className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               required
             >
-              <option value="student">Student</option>
               <option value="teacher">Teacher</option>
               <option value="admin">Admin</option>
             </select>
           </div>
-
-          {/* Parent's Email Input (Conditional) */}
-          {form.role === 'student' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Parent's Email
-              </label>
-              <input
-                type="email"
-                name="parentEmail"
-                placeholder="Enter parent's email"
-                value={form.parentEmail}
-                onChange={handleChange}
-                className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          )}
 
           {/* Register Button */}
           <div>
@@ -124,7 +105,7 @@ const Register = () => {
           <p className="text-gray-600">
             Already have an account?{' '}
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/admin')}
               className="text-blue-500 hover:underline"
             >
               Login here

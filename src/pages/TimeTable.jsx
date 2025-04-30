@@ -129,21 +129,25 @@ const AdminTimetable = () => {
             <p>Loading classes...</p>
           ) : (
             <select
-              value={selectedClass}
-              onChange={(e) => setSelectedClass(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="">Select Class</option>
-              {Array.isArray(classes) && classes.length > 0 ? (
-                classes.map((cls) => (
-                  <option key={cls._id} value={cls._id}>
-                    {cls.name} {cls.section}
-                  </option>
-                ))
-              ) : (
-                <option value="">No classes available</option>
-              )}
-            </select>
+            value={selectedClass}
+            onChange={(e) => {
+              setSelectedClass(e.target.value);
+              console.log('Selected Class ID:', e.target.value); // ✅ Log selected class ID
+            }}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="">Select Class</option>
+            {Array.isArray(classes) && classes.length > 0 ? (
+              classes.map((cls) => (
+                <option key={cls._id} value={cls._id}>
+                  {cls.name} {cls.section}
+                </option>
+              ))
+            ) : (
+              <option value="">No classes available</option>
+            )}
+          </select>
+          
           )}
         </div>
 

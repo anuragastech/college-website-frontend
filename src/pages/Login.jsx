@@ -25,8 +25,9 @@ const Login = () => {
     try {
       const { data } = await instance.post('/api/auth/login', { email, password });
 
-      // Store user data in localStorage or context
+      // Store user data and token in localStorage
       localStorage.setItem('userInfo', JSON.stringify(data));
+      localStorage.setItem('token', data.token); // Save token in local storage
 
       // Role-based redirection
       if (data.role === 'student') {

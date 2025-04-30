@@ -6,13 +6,11 @@ import SubjectList from './components/AllSubjects';
 const AddSubject = () => {
   const [name, setName] = useState('');
   const [teacherId, setTeacherId] = useState('');
-  const [classId, setClassId] = useState('');
   const [teachers, setTeachers] = useState([]);
-  const [classes, setClasses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Fetch existing teachers when modal opens
+  // ✅ Fetch teachers when modal opens
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
@@ -23,27 +21,17 @@ const AddSubject = () => {
       }
     };
 
-    const fetchClasses = async () => {
-      try {
-        const response = await axios.get('/api/classes/getData');
-        setClasses(response.data);
-      } catch (error) {
-        console.error('Error fetching classes:', error);
-      }
-    };
-
     if (isModalOpen) {
       fetchTeachers();
-      fetchClasses();
     }
   }, [isModalOpen]);
 
   // ✅ Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Sending Data:', { name, teacherId, classId });
+    console.log('Sending Data:', { name, teacherId });
     try {
-      await axios.post('/api/subjects/add-subject', { name, teacherId, classId });
+      await axios.post('/api/subject/add-subject', { name, teacherId });
       alert('Subject added successfully');
       setIsModalOpen(false);
       navigate('/admin/dashboard');
@@ -114,26 +102,6 @@ const AddSubject = () => {
                     {teachers.map((teacher) => (
                       <option key={teacher._id} value={teacher._id}>
                         {teacher.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* ✅ Class Selection */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Assign Class
-                  </label>
-                  <select
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white transition"
-                    value={classId}
-                    onChange={(e) => setClassId(e.target.value)}
-                    required
-                  >
-                    <option value="">Select a class</option>
-                    {classes.map((cls) => (
-                      <option key={cls._id} value={cls._id}>
-                        {cls.name}
                       </option>
                     ))}
                   </select>

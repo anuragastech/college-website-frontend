@@ -7,6 +7,9 @@ import ParentList from "../../pages/parentData";
 import Event from "../../pages/EventList";
 import Exam from "../../pages/ExamList";
 import Home from "../Home"
+import Attendence from '../components/GetAttendence'
+
+
 
 const DashboardContent = ({ selectedMenu }) => {
   return (
@@ -63,7 +66,7 @@ const DashboardContent = ({ selectedMenu }) => {
 
       {selectedMenu === "attendance" && (
         <div>
-          <AddClass />
+          <Attendence />
         </div>
       )}
     </div>

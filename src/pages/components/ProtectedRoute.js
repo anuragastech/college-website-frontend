@@ -1,14 +1,34 @@
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+const jwt = require('jsonwebtoken');
+const Student = require('../');
 
-const ProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
+const protect = async (req, res, next) => {
+  let token;
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
   }
 
-  return children;
+  if (!token) {
+    return res.status(401).json({ message: 'Not authorized, no token' });
+  }
+
+  try {
+    // Decode token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded token:', decoded);
+
+    // Find student by ID
+    const student = await Student.findById(decoded.id);
+    if (!student) {
+      return res.status(401).json({ message: 'Student not found' });
+    }
+
+    req.user = student; // ✅ Attach student data to req.user
+    next();
+  } catch (error) {
+    console.error('Token verification failed:', error);
+    return res.status(401).json({ message: 'Not authorized' });
+  }
 };
 
-export default ProtectedRoute;
+module.exports = protect;

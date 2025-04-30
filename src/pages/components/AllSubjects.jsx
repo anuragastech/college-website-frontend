@@ -33,7 +33,11 @@ const SubjectList = () => {
 
   // ✅ Handle Edit
   const handleEdit = (subject) => {
-    setEditedSubject(subject);
+    setEditedSubject({
+      _id: subject._id,
+      name: subject.name,
+      teacherId: subject.teacherId || ''
+    });
     setEditMode(true);
   };
 
@@ -41,7 +45,7 @@ const SubjectList = () => {
     try {
       await instance.put(`/api/subject/edit-subject/${editedSubject._id}`, {
         name: editedSubject.name,
-        teacherId: editedSubject.teacherId,
+        teacherId: editedSubject.teacherId
       });
       fetchSubjects();
       setEditMode(false);
@@ -69,43 +73,62 @@ const SubjectList = () => {
         📚 Subject List
       </h2>
 
+      {/* ✅ Subject Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full border-collapse bg-white shadow-md rounded-xl">
           <thead>
             <tr className="bg-blue-100">
-              <th className="py-3 px-6 border-b text-left text-gray-800 font-semibold">Subject Name</th>
-              <th className="py-3 px-6 border-b text-left text-gray-800 font-semibold">Teacher Name</th>
-              <th className="py-3 px-6 border-b text-left text-gray-800 font-semibold">Teacher Email</th>
-              <th className="py-3 px-6 border-b text-left text-gray-800 font-semibold">Actions</th>
+              <th className="py-3 px-6 border-b text-left text-gray-800 font-semibold">
+                Subject Name
+              </th>
+              <th className="py-3 px-6 border-b text-left text-gray-800 font-semibold">
+                Teacher Name
+              </th>
+              <th className="py-3 px-6 border-b text-left text-gray-800 font-semibold">
+                Teacher Email
+              </th>
+              <th className="py-3 px-6 border-b text-left text-gray-800 font-semibold">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
-            {subjects.map((subject) => (
-              <tr key={subject._id} className="hover:bg-gray-50 transition">
-                <td className="py-4 px-6 border-b text-gray-700">{subject.name}</td>
-                <td className="py-4 px-6 border-b text-gray-700">
-                  {subject.teacher ? subject.teacher.name : 'N/A'}
-                </td>
-                <td className="py-4 px-6 border-b text-gray-700">
-                  {subject.teacher ? subject.teacher.email : 'N/A'}
-                </td>
-                <td className="py-4 px-6 border-b text-gray-700">
-                  <button
-                    onClick={() => handleEdit(subject)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2 hover:bg-blue-600 transition"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(subject._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {subjects.map((subject) => (
+    <tr key={subject._id} className="hover:bg-gray-50 transition">
+      {/* ✅ Subject Name */}
+      <td className="py-4 px-6 border-b text-gray-700">
+        {subject.name}
+      </td>
+
+      {/* ✅ Teacher Name */}
+      <td className="py-4 px-6 border-b text-gray-700">
+        {subject.teacher?.name || 'N/A'}
+      </td>
+
+      {/* ✅ Teacher Email */}
+      <td className="py-4 px-6 border-b text-gray-700">
+        {subject.teacher?.email || 'N/A'}
+      </td>
+
+      {/* ✅ Action Buttons */}
+      <td className="py-4 px-6 border-b text-gray-700">
+        <button
+          onClick={() => handleEdit(subject)}
+          className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2 hover:bg-blue-600 transition"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => handleDelete(subject._id)}
+          className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
 
@@ -119,7 +142,9 @@ const SubjectList = () => {
               <input
                 type="text"
                 value={editedSubject.name}
-                onChange={(e) => setEditedSubject({ ...editedSubject, name: e.target.value })}
+                onChange={(e) =>
+                  setEditedSubject({ ...editedSubject, name: e.target.value })
+                }
                 className="w-full px-4 py-2 border rounded-md mb-4"
               />
             </div>
@@ -127,7 +152,9 @@ const SubjectList = () => {
               <label className="block text-sm font-medium mb-1">Assign Teacher</label>
               <select
                 value={editedSubject.teacherId}
-                onChange={(e) => setEditedSubject({ ...editedSubject, teacherId: e.target.value })}
+                onChange={(e) =>
+                  setEditedSubject({ ...editedSubject, teacherId: e.target.value })
+                }
                 className="w-full px-4 py-2 border rounded-md mb-4"
               >
                 <option value="">Select a teacher</option>

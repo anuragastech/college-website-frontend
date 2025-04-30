@@ -27,8 +27,9 @@ export const updateAttendance = async (timetableId, periodNumber, attendanceData
     try {
       const response = await axios.put(`/api/timetable/markAttendance/${timetableId}`, {
         periodNumber,
-        attendance: attendanceData // Renamed to 'attendance' for better readability
+        attendanceData, // ✅ Use the correct key 'attendanceData'
       });
+      
       return response.data;
     } catch (error) {
       console.error('Error updating attendance:', error?.response?.data || error.message);

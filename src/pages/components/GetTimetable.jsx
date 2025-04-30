@@ -1,170 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import axios from '../../services/axios';
+import React, { useEffect, useState } from 'react';
+import { getTimetable, getClasses } from '../../api/TimeTable';
 
-const Timetable = () => {
-  const [timetableData, setTimetableData] = useState(null);
+const TimetableDisplay = () => {
+  const [classId, setClassId] = useState('');
+  const [date, setDate] = useState('');
   const [classes, setClasses] = useState([]);
-  const [selectedClass, setSelectedClass] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [timetable, setTimetable] = useState(null);
 
-  // ✅ Fetch available classes
+  // Fetch existing classes
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await axios.get('/api/classes/get-classes');
-        console.log('Fetched classes:', response.data);
-
-        // Handle response structure properly
-        setClasses(Array.isArray(response.data.classes) ? response.data.classes : []);
+        const data = await getClasses();
+        if (Array.isArray(data.classes)) {
+          setClasses(data.classes);
+        } else {
+          setClasses([]);
+        }
       } catch (error) {
-        console.error('Error fetching classes:', error);
-        setError('Failed to load classes.');
+        console.error('Failed to fetch classes:', error);
+        setClasses([]);
       }
     };
 
     fetchClasses();
   }, []);
 
-  // ✅ Fetch timetable when class is selected
   const fetchTimetable = async () => {
-    if (!selectedClass) {
-      setError('Please select a class.');
+    if (!classId || !date) {
+      alert('Please select class and date');
       return;
     }
 
-    setLoading(true);
-    setError('');
-    setTimetableData(null);
-
     try {
-      console.log(`Fetching timetable for class: ${selectedClass}`);
-
-      // Pass classId as a path parameter
-      const response = await axios.get(`/api/timetable/getAllTimetable/${selectedClass}`);
-      console.log('Timetable response:', response.data);
-
-      if (response.data) {
-        if (response.data.isHoliday) {
-          setTimetableData(null);
-          setError('No timetable available – today is a holiday.');
-        } else if (response.data.periods?.length > 0) {
-          setTimetableData(response.data);
-        } else {
-          setTimetableData(null);
-          setError('No timetable available for this class.');
-        }
-      }
+      const data = await getTimetable(classId, date);
+      setTimetable(data);
     } catch (error) {
-      console.error('Error fetching timetable:', error);
-      setTimetableData(null);
-      setError('Timetable not assigned'); // ✅ Show only when fetching fails
+      console.error('Failed to fetch timetable:', error);
+      setTimetable(null);
     }
   };
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-bold mb-6">Class Timetable</h2>
+    <div className="p-8 bg-gray-900 text-white rounded-lg shadow-xl">
+      <h2 className="text-3xl font-bold mb-6 text-blue-400">View Timetable</h2>
+      
+      {/* Class Selector */}
+      <select
+        value={classId}
+        onChange={(e) => setClassId(e.target.value)}
+        className="w-full p-3 mb-4 border border-gray-700 rounded bg-gray-800 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">Select Class</option>
+        {classes.map((cls) => (
+          <option key={cls._id} value={cls._id}>
+            {cls.name}
+          </option>
+        ))}
+      </select>
 
-      {/* ✅ Class Selector */}
-      <div className="flex gap-4 mb-6">
-        <select
-          value={selectedClass}
-          onChange={(e) => {
-            console.log('Selected class:', e.target.value);
-            setSelectedClass(e.target.value);
-          }}
-          className="border border-gray-300 p-3 rounded w-full"
-        >
-          <option value="">Select Class</option>
-          {Array.isArray(classes) && classes.length > 0 ? (
-            classes.map((classItem) => (
-              <option key={classItem._id} value={classItem._id}>
-                {classItem.name} - {classItem.section}
-              </option>
-            ))
+      {/* Date Picker */}
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        className="w-full p-3 mb-4 border border-gray-700 rounded bg-gray-800 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      {/* Fetch Timetable Button */}
+      <button
+        onClick={fetchTimetable}
+        className="bg-blue-600 w-full text-white px-6 py-3 rounded hover:bg-blue-500 transition duration-300"
+      >
+        Fetch Timetable
+      </button>
+
+      {/* Display Timetable */}
+      {timetable && (
+        <div className="mt-8 bg-gray-800 p-6 rounded-lg shadow-md">
+          {timetable.isHoliday ? (
+            <p className="text-red-400 text-lg font-semibold">
+              No timetable available – today is a holiday.
+            </p>
           ) : (
-            <option disabled>No classes available</option>
+            <>
+              <h3 className="text-xl font-semibold mb-4 text-blue-400">Periods:</h3>
+              <ul className="divide-y divide-gray-700">
+                {timetable.periods.map((period) => (
+                  <li
+                    key={period.periodNumber}
+                    className="py-2 flex justify-between items-center"
+                  >
+                    <span className="text-gray-300">
+                      Period {period.periodNumber}:
+                    </span>
+                    <span className="text-blue-300">
+                      {period.subject.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
-        </select>
-        <button
-          onClick={fetchTimetable}
-          className={`bg-blue-500 text-white p-3 rounded ${
-            loading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          disabled={loading || !selectedClass}
-        >
-          {loading ? 'Loading...' : 'Show Timetable'}
-        </button>
-      </div>
-
-      {/* ✅ Error Message */}
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-
-      {/* ✅ Timetable Table */}
-      {timetableData?.periods?.length > 0 ? (
-        <table className="w-full border-collapse border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-gray-200 p-3">Date</th>
-              <th className="border border-gray-200 p-3">Class</th>
-              <th className="border border-gray-200 p-3">Teacher</th>
-              <th className="border border-gray-200 p-3">Subject</th>
-              <th className="border border-gray-200 p-3">Period</th>
-              <th className="border border-gray-200 p-3">Attendance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {timetableData.periods.map((period) => (
-              <tr key={period._id} className="hover:bg-gray-50">
-                <td className="border border-gray-200 p-3">
-                  {new Date(timetableData.date).toLocaleDateString()}
-                </td>
-                <td className="border border-gray-200 p-3">
-                  {timetableData.class?.name || 'N/A'}
-                </td>
-                <td className="border border-gray-200 p-3">
-                  {period.teacher?.name || 'N/A'}
-                </td>
-                <td className="border border-gray-200 p-3">
-                  {period.subject?.name || 'N/A'}
-                </td>
-                <td className="border border-gray-200 p-3">
-                  {period.periodNumber}
-                </td>
-                <td className="border border-gray-200 p-3">
-                  {period.studentsAttendance.length > 0 ? (
-                    period.studentsAttendance.map((att) => (
-                      <div key={att.student?._id}>
-                        {att.student?.name || 'N/A'} —{' '}
-                        <span
-                          className={
-                            att.status === 'present'
-                              ? 'text-green-500'
-                              : 'text-red-500'
-                          }
-                        >
-                          {att.status}
-                        </span>
-                      </div>
-                    ))
-                  ) : (
-                    <span className="text-gray-500">No data</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        !loading && (
-          <p className="text-gray-500 mt-4">
-            {error || 'No timetable available.'}
-          </p>
-        )
+        </div>
       )}
     </div>
   );
 };
 
-export default Timetable;
+export default TimetableDisplay;

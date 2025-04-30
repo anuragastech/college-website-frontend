@@ -47,15 +47,16 @@ const Sidebar = ({ selectedMenu, setSelectedMenu }) => {
 
       {/* Logout */}
       <div className="px-8 py-6 border-t border-gray-700">
-        <button
-          onClick={() => {
-            localStorage.removeItem('userInfo');
-            window.location.href = '/login';
-          }}
-          className="w-full bg-white text-gray-900 font-semibold text-lg py-3 rounded-xl transition duration-300 hover:bg-gray-200"
-        >
-          Logout
-        </button>
+      <button
+  onClick={() => {
+    localStorage.clear(); // Clears all keys from localStorage
+    window.location.href = '/'; // Redirect to login page after logout
+  }}
+  className="w-full bg-white text-gray-900 font-semibold text-lg py-3 rounded-xl transition duration-300 hover:bg-gray-200"
+>
+  Logout
+</button>
+
       </div>
     </div>
   );

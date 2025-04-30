@@ -12,6 +12,11 @@ const StudentTable = () => {
     classId: '',
     email: '',
     phone: '',
+    parentDetails: {
+      name: '',
+      email: '',
+      phone: '',
+    },
   });
 
   useEffect(() => {
@@ -52,30 +57,29 @@ const StudentTable = () => {
     setFormData({
       name: student.name || '',
       rollNumber: student.rollNumber || '',
-      studentClass: student.studentClass?._id || '',
+      studentClass: student.classId?._id || '',
       classId: student.classId || '',
       email: student.email || '',
       phone: student.phone || '',
+      parentDetails: {
+        name: student.parentDetails?.name || '',
+        email: student.parentDetails?.email || '',
+        phone: student.parentDetails?.phone || '',
+      },
     });
+  
   };
 
   const handleUpdate = async () => {
     try {
       const response = await axios.put(`/api/students/${editingStudent}`, {
         ...formData,
-        classId: formData.studentClass,
+        classId: formData.studentClass, // ✅ Fix classId assignment
         parentDetails: {
-          name: formData.parentDetails?.name || '',
-          email: formData.parentDetails?.email || '',
-          phone: formData.parentDetails?.phone || '',
+          name: formData.parentDetails.name,
+          email: formData.parentDetails.email,
+          phone: formData.parentDetails.phone,
         },
-        address: {
-          street: formData.address?.street || '',
-          city: formData.address?.city || '',
-          state: formData.address?.state || '',
-          postalCode: formData.address?.postalCode || '',
-          country: formData.address?.country || '',
-        }
       });
   
       console.log('Student updated:', response.data);
@@ -85,6 +89,7 @@ const StudentTable = () => {
       console.error('Error updating student:', error.response?.data || error.message);
     }
   };
+  
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -130,35 +135,79 @@ const StudentTable = () => {
       {editingStudent && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4 text-gray-800">Edit Student</h3>
-            <div className="space-y-4">
-              {['name', 'rollNumber', 'email', 'phone'].map((field) => (
-                <input
-                  key={field}
-                  type="text"
-                  value={formData[field]}
-                  onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                  placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                  className="border-gray-300 border w-full p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                />
-              ))}
-              <select
-                value={formData.studentClass}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    studentClass: e.target.value,
-                    classId: e.target.value,
-                  })
-                }
-                className="border-gray-300 border w-full p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-              >
-                <option value="">Select Class</option>
-                {classes.map((cls) => (
-                  <option key={cls._id} value={cls._id}>{cls.name}</option>
-                ))}
-              </select>
-            </div>
+          <h3 className="text-xl font-bold mb-4 text-gray-800">Edit Student</h3>
+<div className="space-y-4">
+  {['name', 'rollNumber', 'email', 'phone'].map((field) => (
+    <input
+      key={field}
+      type="text"
+      value={formData[field]}
+      onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+      placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+      className="border-gray-300 border w-full p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+    />
+  ))}
+
+  {/* Class Selection */}
+  <select
+    value={formData.studentClass}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        studentClass: e.target.value,
+        classId: e.target.value,
+      })
+    }
+    className="border-gray-300 border w-full p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+  >
+    <option value="">Select Class</option>
+    {classes.map((cls) => (
+      <option key={cls._id} value={cls._id}>
+        {cls.name}
+      </option>
+    ))}
+  </select>
+
+  {/* Parent Details */}
+  <h4 className="text-lg font-semibold mt-4">Parent Details</h4>
+  <input
+    type="text"
+    value={formData.parentDetails.name}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        parentDetails: { ...formData.parentDetails, name: e.target.value },
+      })
+    }
+    placeholder="Parent Name"
+    className="border-gray-300 border w-full p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+  />
+  <input
+    type="email"
+    value={formData.parentDetails.email}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        parentDetails: { ...formData.parentDetails, email: e.target.value },
+      })
+    }
+    placeholder="Parent Email"
+    className="border-gray-300 border w-full p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+  />
+  <input
+    type="text"
+    value={formData.parentDetails.phone}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        parentDetails: { ...formData.parentDetails, phone: e.target.value },
+      })
+    }
+    placeholder="Parent Phone"
+    className="border-gray-300 border w-full p-2 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+  />
+</div>
+
             <div className="flex justify-end mt-6 space-x-2">
               <button
                 onClick={() => setEditingStudent(null)}

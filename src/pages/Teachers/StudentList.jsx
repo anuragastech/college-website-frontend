@@ -11,6 +11,7 @@ const StudentTable = () => {
   const fetchStudents = async () => {
     try {
       const response = await axios.get('/api/students/get-students');
+      console.log('Fetched Students:', response.data); // ✅ Debugging line
       setStudents(response.data);
     } catch (error) {
       console.error('Error fetching students:', error);
@@ -34,7 +35,7 @@ const StudentTable = () => {
               <tr key={student._id} className="hover:bg-gray-100 border-b">
                 <td className="px-6 py-4">{student.name}</td>
                 <td className="px-6 py-4">{student.rollNumber}</td>
-                <td className="px-6 py-4">{student.className}</td>
+                <td className="px-6 py-4">{student.className || 'Not Assigned'}</td>
                 <td className="px-6 py-4">{student.email}</td>
                 <td className="px-6 py-4">{student.phone}</td>
               </tr>
