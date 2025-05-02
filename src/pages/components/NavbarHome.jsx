@@ -64,7 +64,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-md px-4 py-4 space-y-2">
-          <Link to="/home" className="block text-gray-700 font-medium hover:text-blue-700">Home</Link>
+          <Link to="/" className="block text-gray-700 font-medium hover:text-blue-700">Home</Link>
           <Link to="/about" className="block text-gray-700 font-medium hover:text-blue-700">About</Link>
           <Link to="/contact" className="block text-gray-700 font-medium hover:text-blue-700">Contact</Link>
           <div>
