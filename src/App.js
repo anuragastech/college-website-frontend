@@ -54,7 +54,7 @@ function App() {
       <Route path="/teacher" element={<TchrLogin />} />
 
 
-      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
 
