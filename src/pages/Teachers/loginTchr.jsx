@@ -1,6 +1,8 @@
+// pages/TeacherLogin.js
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../services/axios';
+import Navbar from '../../pages/components/NavbarHome'; // Import Navbar
 
 const TeacherLogin = () => {
   const [email, setEmail] = useState('');
@@ -19,51 +21,54 @@ const TeacherLogin = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg border">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
-          Teacher Login
-        </h2>
-        
-        <div className="mb-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
+    <div>
+      <Navbar /> {/* Include Navbar here */}
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg border">
+          <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
+            Teacher Login
+          </h2>
+          
+          <div className="mb-4">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-        <div className="mb-4">
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
+          <div className="mb-4">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md transition"
-        >
-          Login
-        </button>
+          <button
+            onClick={handleLogin}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md transition"
+          >
+            Login
+          </button>
 
-        {error && <p className="text-red-500 text-center mt-3">{error}</p>}
+          {error && <p className="text-red-500 text-center mt-3">{error}</p>}
 
-        <div className="mt-4 text-center">
-          <p className="text-gray-600">
-            Don't have an account?{' '}
-            <Link
-              to="/registerteacher"
-              className="text-blue-500 hover:underline"
-            >
-              Register here
-            </Link>
-          </p>
+          <div className="mt-4 text-center">
+            <p className="text-gray-600">
+              Don't have an account?{' '}
+              <Link
+                to="/registerteacher"
+                className="text-blue-500 hover:underline"
+              >
+                Register here
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
