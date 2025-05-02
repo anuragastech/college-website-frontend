@@ -35,17 +35,29 @@ import StudentHomePage from './pages/students/StudentHomePae';
 import StudentLogin from './pages/students/stdLogin';
 import TchrLogin    from './pages/Teachers/loginTchr'
 import  TchrSignup from './pages/Teachers/signupTchr'
+
+
+import Home from './pages/HomePage/home';
+import About from './pages/components/aboutHome';
+import Contact from './pages/components/contactHome'
+
 function App() {
   return (
     <Routes>
       {/* 🌐 Public Routes */}
       <Route path="/admin" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/" element={<StudentLogin />} />
+      <Route path="/studentLogin" element={<StudentLogin />} />
       <Route path="/studensinup" element={<StudentRegister />} />
 
       <Route path="/registerteacher" element={<TchrSignup />} />
       <Route path="/teacher" element={<TchrLogin />} />
+
+
+      <Route path="/home" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+
 
       {/* 👑 Admin Routes */}
       <Route
