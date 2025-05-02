@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'https://college-website-backend-soiv.onrender.com',
+  // baseURL: 'http://localhost:5888',
+  baseURL: 'https://college-website-backend-org.onrender.com',
+
+
 });
 
 export default instance;
